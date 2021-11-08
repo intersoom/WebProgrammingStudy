@@ -220,3 +220,105 @@ var의 문제점:
     let, const는 '코드블록 단위'로 구분됨: **블록 스코프**
     
     → 반복문이나 조건문에서는 지역 변수를 만들 수 있음
+
+### 4. 함수 만들기
+
+1. **함수 선언**
+
+```jsx
+// 함수 선언
+function 함수이름(파라미터){
+	동작
+	return 리턴값
+}
+```
+
+→ **Hoisting**이 일어남 따라서 선언 이전에 접근 가능함
+
+→ **함수 스코프**: 함수 내에서 선언한 함수는 외부에서 접근할 수 없음, 반복문 또는 조건문 내에서 선언한 함수는 외부에서 접근할 수 있음
+
+1. **함수 표현식:** 함수를 값처럼 사용하는 것 (ex.함수를 변수에 할당하기)
+
+```jsx
+// 함수 표현식(1)
+const printCodeit = function(){
+	console.log('Codeit');
+};
+
+printCodeit();
+
+// 함수 표현식(2)
+const myBtn = document.querySelector('#myBtn');
+
+myBtn.addEventListener('click', function(){
+	console.log('button is clicked!');
+});
+```
+
+→ **블록 스코프:** 함수든 반복문/ 조건문이든 블록 내부에서 선언한 함수는 외부에서 접근할 수 없음
+
+⚠️ 최대한 일정한 방식을 사용하는 것이 좋음! ⚠️
+
+### 5. 기명 함수 표현식(Named Function Expression)
+
+뜻: 함수 표현식으로 함수를 만들 때는 선언하는 함수에 이름을 붙여줄 수 있음 이때, 이름 있는 함수 표현식을 의미
+
+→ 함수 표현식으로 함수가 할당된 변수에는 자동으로 name이라는 프로퍼티를 가짐
+
+```jsx
+// 이름이 없는 함수를 변수에 할당할 때
+const sayHi = function () {
+  console.log('Hi');
+};
+
+console.log(sayHi.name); // sayHi
+
+// 함수에 이름을 붙여주었을 때
+const sayHi = function printHiInConsole() {
+  console.log('Hi');
+};
+
+console.log(sayHi.name); // printHiInConsole
+```
+
+함수 표현식에서 함수에서 할당된 이름은: 
+
+→ 함수 내부에서 함수 자체를 가리킬 때 사용할 수 있고(재귀함수 같은 경우) 함수를 외부에서 함수를 호출할 때는 사용할 수 없음
+
+예시:
+
+```jsx
+// BAD
+let countdown = function(n) {
+  console.log(n);
+  if (n === 0) {
+    console.log('End!');
+  } else {
+    countdown(n - 1);
+  }
+};
+
+let myFunction = countdown;
+
+countdown = null;
+
+myFunction(5); // TypeError
+
+// GOOD
+let countdown = function printCountdown(n) {
+  console.log(n);
+  if (n === 0) {
+    console.log('End!');
+  } else {
+    printCountdown(n - 1);
+  }
+};
+
+let myFunction = countdown;
+
+countdown = null;
+
+myFunction(5); // 정상적으로 동작
+```
+
+→ 따라서 함수 내에서 함수를 가리켜야 할 때는 꼭 함수 이름을 작성해주는 것이 안전함! 🛠
