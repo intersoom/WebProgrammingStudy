@@ -322,3 +322,134 @@ myFunction(5); // 정상적으로 동작
 ```
 
 → 따라서 함수 내에서 함수를 가리켜야 할 때는 꼭 함수 이름을 작성해주는 것이 안전함! 🛠
+
+### 6. 즉시 실행 함수 (IIFE)
+
+뜻: Immediately Invoked Function Expression (IIFE), 선언과 동시에 즉시 실행되는 함수
+
+형태:
+
+```jsx
+(function () {
+  console.log('Hi!');
+})();
+```
+
+⚠️ 주의할 점: 즉시 실행 함수에 이름을 지어주더라도 외부에서 재사용할 수 없음! ⚠️
+
+```jsx
+(function sayHi() {
+  console.log('Hi!');
+})();
+
+sayHi(); // ReferenceError
+```
+
+→ 그래서 일반적으로 이름이 없는 '익명 함수'로 사용 (예외: 재귀함수 사용 시)
+
+활용:
+
+1. 초기화 기능을 사용할 때:
+
+```jsx
+(function init() {
+  // 프로그램이 실행 될 때 기본적으로 동작할 코드들..
+})();
+```
+
+1. 재사용이 필요 없는, 일회성 동작을 구성할 때:
+
+```jsx
+const firstName = Young;
+const lastName = Kang;
+
+const greetingMessage = (function () {
+  const fullName = `${firstName} ${lastName} `;
+
+  return `Hi! My name is ${fullName}`;
+})();
+```
+
+→ 함수의 리턴 값을 바로 변수에 할당하고 싶을 때 사용
+
+장점: 즉시 실행 함수에서 사용하는 변수들은 함수 내에서만 유효하기 때문에 일시적으로 사용할 변수의 이름들을 조금 자유롭게 작성할 수 있음!
+
+### 7. 값으로서 함수
+
+**특징:**
+
+JS에서는 함수를 객체 타입으로 판단함
+
+JS의 함수는 일급함수
+
+**함수의 활용:**
+
+1. 함수 표현식으로 선언/호출될 수 있음
+2. 객체 안의 메소드로 사용될 수 있음
+3. 배열의 요소로 함수를 선언하고 호출할 수 있음
+4. 파라미터로 함수를 선언하고 호출할 수 있음 (*콜백함수: 다른 함수의 파라미터로 호출된 함수)
+
+```jsx
+// 콜백함수 예시
+function makeQuiz(quiz, answer, success, fail){
+	if (blah){
+		console.log(success());
+	} else {
+		console.log(success());
+	}
+
+	function getSuccess() {
+		return 'answer';
+	}
+
+	function getFail() {
+		return 'fail';
+	}
+}
+
+makeQuiz(question, '8', getSuccess, getFail);
+```
+
+1. 함수의 리턴값으로 함수를 선언하고 호출할 수 있음 (*고차 함수: 함수를 리턴하는 함수)
+
+```jsx
+// 고차함수 예시
+function getPrintHi(){
+	return function(){
+		console.log('Hi');
+	};
+};
+
+// 일반적으로 사용
+getPrintHi();
+
+// 고차함수에서 리턴되는 함수를 바로 호출하기 위해서 사용
+getPrintHi()();
+```
+
+### 8. Parameter
+
+**Argument와 Parameter의 차이점:**
+
+1. Parameter: 함수 선언부에서 소괄호() 안에 작성되는 것
+2. Argument: 함수 호출 부분에서 parameter로 전달하는 값
+
+Parameter가 존재하는데 아무 값을 넘겨주지 않으면 
+
+→ 기본값이 없는 경우: undefined가 들어감
+
+→ 기본값이 있는 경우: 기본값이 들어감
+
+```jsx
+function greeting(name = 'Codeit', interest){
+	console.log(name, interest);
+}
+
+greeting(); // Codeit undefined
+greeting('JS'); // JS undefined -> 파라미터 순서대로 
+greeting(undefined, 'Python'); // Codeit Python -> undefined가 전달되면 기본값 넘어감
+```
+
+⚠️ 위와 같은 상황 때문에 기본값을 가지는 parameter는 오른쪽에 작성하는 것이 좋음 ⚠️
+
+파라미터 기본값은 앞의 파라미터를 활용할 수도 있음 (ES2015 이후 문법 지원)
